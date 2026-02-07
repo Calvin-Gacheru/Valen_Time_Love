@@ -289,9 +289,9 @@
         .circles li:nth-child(13){ left: 90%; font-size: 120px; animation-delay: 1s; }
         .circles li:nth-child(14){ left: 15%; font-size: 70px; animation-delay: 6s; }
         .circles li:nth-child(15){ left: 60%; font-size: 50px; animation-delay: 9s; } 
-
-
-        #success-container .card {
+    
+        /* Success Styles */
+        #success-container .card { 
             /* 1. Make it much more see-through (0.4 Opacity) */
             background: rgba(255, 255, 255, 0.4);
             
@@ -308,8 +308,27 @@
             /* 5. Ensure text color is strong enough to read */
             color: #fff;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+
         }
-        </style>
+        /* Restart Button */
+        .restart-btn {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.3s;
+        }
+
+        .restart-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+    </style>
 </head>
 <body>
     <ul class="circles" id="bg-layer-1">
@@ -355,12 +374,15 @@
             </div>
         </div>
 
-        <div id="success-container">
-            <div class="score-board">❤️ LOVE CONFIRMED ❤️</div>
+        <div id="success-container" style="display: none; flex-direction: column;">
+            <div class="score-board">I am Yours, You are Mine</div>
+
             <div class="card">
                 <h2>🎉 Yay! You're My Valentine! 🎉</h2>
                 <p style="font-size: 40px; margin: 10px 0;">🥂🥰</p>
+
                 <p style="font-weight: bold; color: #555;">Thank you for making my day special! ❤️</p>
+                <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
             </div>
         </div>
 
@@ -663,6 +685,31 @@
                     errorPopup.style.display = 'none';
                 }, 3000);
             }
+        }
+
+        //Function to Restart the Game (Can be called from Success Screen)
+        function restartQuiz() {
+            // 1. Reset Variables
+            currentScore = 0;
+            currentQuestionIndex = 0;
+            
+            // 2. Reset Text Counters in the UI
+            document.getElementById('score-val').textContent = '0';
+            document.getElementById('proposal-score-val').textContent = '0';
+
+            // 3. Flip the Screens
+            document.getElementById('success-container').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'flex';
+
+            // 4. Reset the Mood to "Giant Hearts" (Layer 1)
+            // This makes it feel like the start of the app again
+            document.getElementById('bg-layer-2').style.display = 'none'; // Hide text
+            document.getElementById('bg-layer-1').style.display = 'block'; // Show Giants
+
+            // 5. Load Question 1
+            loadQuestion();
+
+            // NOTE: We do NOT touch 'player'. The music keeps playing! 🎵
         }
 
         // Functions to Launch Heart Confetti
