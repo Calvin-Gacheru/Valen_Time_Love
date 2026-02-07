@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Valentine's Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         /* CSS: The Visuals */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
-            color: #333;
+            /* Animated Gradient */
+            background: linear-gradient(-45deg,#ee9ca7,#ff9a9e, #fad0c4, #ffdde1, #ff512f, #dd2476, #ff00cc, #6a11cb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            
             display: flex;
             justify-content: center;
             align-items: center;
@@ -46,6 +50,8 @@
         }
 
         button.unlock-btn { 
+            font-family:Arial, Helvetica, sans-serif;
+            letter-spacing: 1px;
             background: #ff4b4b; 
             color: white; 
             border: none; 
@@ -58,6 +64,11 @@
 
         /* Quiz UI */
         .score-board { 
+            font-family:Arial, Helvetica, sans-serif;
+            letter-spacing: 1px;
+            /* Make Italic and add a subtle shadow for a dreamy effect */
+            font-style: italic;
+            text-shadow: 1px 1px 2px rgba(106, 17, 203, 0.3);
             background: #fff; 
             color: #6a11cb; 
             padding: 10px; 
@@ -66,7 +77,24 @@
             font-weight: bold; 
             margin-bottom: 15px; 
         }
-        .card { background: #fff; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card { 
+            /* New styles for the card container */
+            background: rgba(255, 255, 255, 0.85); /* 85% opacity white */
+            backdrop-filter: blur(10px);            /* The blur magic */
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle white border */
+
+            background: rgba(255, 255, 255, 0.4); /* 65% opacity white */
+            padding: 20px; 
+            border-radius: 30px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+
+            /* Moving button styles */
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative; }
         
         #quiz-container { display: none; flex-direction: column; }
         .question-text { font-size: 1.1em; margin-bottom: 20px; }
@@ -75,10 +103,48 @@
         .option-btn:hover { background: #e0e0e0; }
 
         /* Proposal Styles */
-        #proposal-container { display: none; flex-direction: column; }
+        #proposal-container { 
+            font-size: 1.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-family: 'Pacifico', cursive;
+            letter-spacing: 1px;
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            position: relative;}
         .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        .yes-btn { background-color: #32cd32; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1em; }
-        .no-btn { background-color: #ff3b3b; color: white; padding: 10px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1em; }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 10px 10px rgba(40, 167, 69, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+        .yes-btn { 
+            font-family:Arial, Helvetica, sans-serif;
+            letter-spacing: 0.5px;
+            background-color: #32cd32; 
+            color: white; 
+            padding: 15px 40px; 
+            border: none; 
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.3em; 
+            animation: pulse 2s infinite;
+        }
+
+        .no-btn { 
+            font-family: Arial, Helvetica, sans-serif;
+            letter-spacing: 1px;
+            background-color: #ff3b3b; 
+            color: white; 
+            padding: 15px 40px; 
+            border: none; 
+            border-radius: 50px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 1.3em; 
+            transition: all 0.3s ease; 
+        }
 
         /* Success Styles */
         #success-container { display: none; flex-direction: column; }
@@ -125,6 +191,11 @@
         @keyframes float-heart { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         @keyframes wobble { 0% { transform: rotate(0deg); } 25% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } 75% { transform: rotate(-4deg); } 100% { transform: rotate(0deg); } }
         @keyframes heartbeat { 0% { transform: scale(1); } 15% { transform: scale(1.05); } 30% { transform: scale(1); } 45% { transform: scale(1.05); } 60% { transform: scale(1); } 100% { transform: scale(1); } }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
         #success-container .card { animation: heartbeat 1.5s infinite; }
 
@@ -149,9 +220,104 @@
             10% { opacity: 1; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
-    </style>
+        /* Floating Background Hearts */
+        .circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            z-index: -1; /* Puts them BEHIND the game */
+        }
+
+        .circles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            font-size: bold; /* Size of the heart emoji */
+            color: rgba(255, 255, 255, 0.7); /* Subtle white text/emojis */
+            bottom: -150px;
+            animation: animate 25s linear infinite;
+            white-space: nowrap; /* Keep "I Love You" on one line */
+            text-shadow: 0 0 25px rgba(0,0,0,0.2);
+        }
+
+        /* LAYER 1 SPECIFIC: The Giants (Only applies to the first list) */
+        #bg-layer-1 li:nth-child(1){ left: 25%; font-size: 80px; animation-delay: 0s; }
+        #bg-layer-1 li:nth-child(2){ left: 10%; font-size: 40px; animation-delay: 2s; animation-duration: 12s; }
+        #bg-layer-1 li:nth-child(3){ left: 70%; font-size: 40px; animation-delay: 4s; }
+        #bg-layer-1 li:nth-child(4){ left: 40%; font-size: 100px; animation-delay: 0s; animation-duration: 18s; }
+        #bg-layer-1 li:nth-child(5){ left: 65%; font-size: 40px; animation-delay: 0s; }
+        #bg-layer-1 li:nth-child(6){ left: 75%; font-size: 150px; animation-delay: 3s; }
+        #bg-layer-1 li:nth-child(7){ left: 35%; font-size: 200px; animation-delay: 7s; }
+        #bg-layer-1 li:nth-child(8){ left: 50%; font-size: 50px; animation-delay: 15s; animation-duration: 45s; }
+        #bg-layer-1 li:nth-child(9){ left: 20%; font-size: 30px; animation-delay: 2s; animation-duration: 35s; }
+        #bg-layer-1 li:nth-child(10){ left: 85%; font-size: 180px; animation-delay: 0s; animation-duration: 11s; }
+        
+        /* LAYER 2 SPECIFIC: Text Styling */
+        #bg-layer-2 li {
+            width: auto; height: auto;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: sans-serif;
+        }
+        
+        /* Float Up Animation */
+        @keyframes animate {
+            0%{ transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+            100%{ transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+
+        /* Randomize the hearts */
+        .circles li:nth-child(1){ left: 25%; font-size: 80px; animation-delay: 0s; }
+        .circles li:nth-child(2){ left: 10%; font-size: 40px; animation-delay: 2s; animation-duration: 12s; }
+        .circles li:nth-child(3){ left: 70%; font-size: 40px; animation-delay: 4s; }
+        .circles li:nth-child(4){ left: 40%; font-size: 100px; animation-delay: 0s; animation-duration: 18s; }
+        .circles li:nth-child(5){ left: 65%; font-size: 40px; animation-delay: 0s; } 
+        .circles li:nth-child(6){ left: 75%; font-size: 150px; animation-delay: 3s; } /* HUGE */
+        .circles li:nth-child(7){ left: 35%; font-size: 200px; animation-delay: 7s; } /* GIGANTIC */
+        .circles li:nth-child(8){ left: 50%; font-size: 50px; animation-delay: 15s; animation-duration: 45s; }
+        .circles li:nth-child(9){ left: 20%; font-size: 30px; animation-delay: 2s; animation-duration: 35s; }
+        .circles li:nth-child(10){ left: 85%; font-size: 180px; animation-delay: 0s; animation-duration: 11s; }
+        .circles li:nth-child(11){ left: 5%; font-size: 90px; animation-delay: 5s; }
+        .circles li:nth-child(12){ left: 55%; font-size: 60px; animation-delay: 8s; }
+        .circles li:nth-child(13){ left: 90%; font-size: 120px; animation-delay: 1s; }
+        .circles li:nth-child(14){ left: 15%; font-size: 70px; animation-delay: 6s; }
+        .circles li:nth-child(15){ left: 60%; font-size: 50px; animation-delay: 9s; } 
+
+
+        #success-container .card {
+            /* 1. Make it much more see-through (0.4 Opacity) */
+            background: rgba(255, 255, 255, 0.4);
+            
+            /* 2. Increase the blur so text is still readable */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px); /* For Safari */
+            
+            /* 3. Make the border subtler */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            
+            /* 4. Add a white glow so it looks like it's shining */
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+            
+            /* 5. Ensure text color is strong enough to read */
+            color: #fff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        </style>
 </head>
 <body>
+    <ul class="circles" id="bg-layer-1">
+        <li>❤️</li> <li>💖</li> <li>🤍</li> <li>💘</li> <li>💝</li>
+        <li>❤️</li> <li>💖</li> <li>🤍</li> <li>💘</li> <li>💝</li>
+        <li>❤️</li> <li>💖</li> <li>🤍</li> <li>💘</li> <li>💝</li>
+    </ul>
+    <ul class="circles" id="bg-layer-2" style="display: none;"></ul>
 
     <div id="music-player" style="position: absolute; top: -9999px; left: -9999px; opacity: 0; pointer-events: none;"></div>
 
@@ -176,13 +342,15 @@
             </div>
         </div>
 
-        <div id="proposal-container">
+        <div id="proposal-container" style="display:none; flex-direction: column;">
             <div class="score-board">Score: <span id="proposal-score-val">0</span>/<span id="total-score">4</span></div> 
             <div class="card">
-                <h2 style="margin-bottom: 20px;">Will you be my Valentine?</h2>
+                <h2 id="proposal-question" style="margin-bottom: 20px;">Will you be my Valentine?</h2>
+                <p id="no-message" style="min-height: 25px; font-weight: bold; color: #ff4b4b;"></p>
+
                 <div class="btn-group">
-                    <button class="yes-btn" onclick="handleProposal('yes')">Yes ❤️</button>
-                    <button class="no-btn" onclick="handleProposal('no')">No</button>
+                    <button class="yes-btn" id="yes-btn" onclick="handleProposal('yes')">Yes ❤️</button>
+                    <button class="no-btn" id="no-btn" onclick="handleNoClick()">No</button>
                 </div>
             </div>
         </div>
@@ -220,6 +388,10 @@
         let CORRECT_PASSWORD = "123"; 
         let MUSIC_ID = ""; 
         let player; 
+        let currentScore = 0;
+        let currentQuestionIndex = 0;
+
+        let currentMood = 'normal'; // Track current mood so we don't reset it unnecessarily
         
         // Default Fallback Questions
         let questions = [
@@ -233,8 +405,7 @@
             }
         ];
 
-        let currentScore = 0;
-        let currentQuestionIndex = 0;
+
 
         // --- 1. STARTUP SEQUENCE ---
         window.onload = function() {
@@ -257,6 +428,11 @@
                         // NOW load the YouTube Script (Only after we have the ID)
                         loadYoutubeScript();
                     }
+
+                    // [NEW] Check for Custom Proposal Text
+                    if(customConfig.proposalText && customConfig.proposalText.trim() !== "") {
+                        document.getElementById('proposal-question').textContent = customConfig.proposalText;
+                    }
                     
                 } catch (e) {
                     console.error("Error loading data", e);
@@ -268,7 +444,7 @@
             document.getElementById('total-score').textContent = questions.length;
         };
 
-        // --- 2. YOUTUBE LOGIC ---
+        // --- YOUTUBE LOGIC ---
         function loadYoutubeScript() {
             var tag = document.createElement('script');
             tag.src = "https://www.youtube.com/iframe_api";
@@ -306,28 +482,7 @@
             }
         }
 
-        // --- 3. QUIZ LOGIC ---
-        function checkPassword() {
-            const input = document.getElementById('password-input').value;
-            if(input === CORRECT_PASSWORD) {
-                document.getElementById('password-gate').style.display = 'none';
-                
-                // TRIGGER MUSIC HERE
-                if(player && typeof player.playVideo === 'function') {
-                    player.playVideo();
-                    player.setVolume(50);
-                    console.log("Playing Music...");
-                } else {
-                    console.log("Player not ready yet.");
-                }
-
-                document.getElementById('quiz-container').style.display = 'flex';
-                loadQuestion();
-            } else {
-                document.getElementById('error-msg').style.display = 'block';
-            }
-        }
-
+        // Function to Load Each Question
         function loadQuestion() {
             if (currentQuestionIndex >= questions.length) {
                 document.getElementById('quiz-container').style.display = 'none';
@@ -390,10 +545,116 @@
             }, 2000); 
         }
 
+        //Message pool
+        const noMessages = [
+            "I see you press No 😤",
+            "Hey Stop it!",
+            "Just Say Yes already...",
+            "I know you wanna say yes 😉",
+            "I wanna cry 😭",
+            "You are breaking my heart 💔",
+            "Okay, now I'm mad 😠",
+            "Pretty please? 🥺",
+            "Ouch! That hurts! 😢",
+            "Are you sure? I thought we had something special! 🥺",
+            "I guess I'll just cry in the corner... 😭",
+            "Well, that wasn't very nice... 😔",
+            "I thought we were a match made in heaven! 💔",
+            "You broke my heart into pieces! 💔",
+            "I can't believe you said no... 😢",
+            "I thought we were meant to be! 🥺",
+            "That stings more than I expected... 😭"
+        ];
+
+        let messageIndex = 0;
+        
+        // Define your two "Moods" (Mix of emojis and text)
+        const moods = {
+            happy: ['❤️', '💖', 'I❤️U', 'Love You', '🥰', 'Forever', 'You&Me', '💘', '💕', '🫂', '🤗'],
+            sad: ['💔', '😢', '😔', '😟', '☹️', '🥺', '🥹', '😓', '😞', '😖', '😭', '😢', '😥', '🥀']
+        };
+
+        function setMood(moodType) {
+            //Update the state
+            currentMood = moodType;
+
+            // Hide Layer 1 (Giants) & Show Layer 2 (Moods)
+            document.getElementById('bg-layer-1').style.display = 'none';
+
+            // Show Mood layer 
+            const layer2 = document.getElementById('bg-layer-2');
+            layer2.style.display = 'block';
+            layer2.innerHTML = ''; // Clear previous mood
+
+            // Generate Floating Text/Emojis
+            const items = moods[moodType];
+            for(let i = 0; i < 20; i++) {
+                const li = document.createElement('li');
+                li.textContent = items[Math.floor(Math.random() * items.length)];
+
+                // Randomize position, size, and animation for each item
+                li.style.left = Math.random() * 90 + '%';
+                li.style.fontSize = (20 + Math.random() * 30) + 'px'; // Smaller text size
+                li.style.animationDelay = (Math.random() * 5) + 's';
+                li.style.animationDuration = (10 + Math.random() * 10) + 's';
+                layer2.appendChild(li);
+            }
+        }
+
+        // Check Password and Start Quiz
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            if(input === CORRECT_PASSWORD) {
+                document.getElementById('password-gate').style.display = 'none';
+                
+                // TRIGGER MUSIC HERE
+                if(player && typeof player.playVideo === 'function') {
+                    player.playVideo();
+                    player.setVolume(50);
+                    console.log("Playing Music...");
+                } else {
+                    console.log("Player not ready yet.");
+                }
+
+                document.getElementById('quiz-container').style.display = 'flex';
+                loadQuestion();
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        }
+
+        // Handle "No" Click (Triggers Sadness)
+        function handleNoClick() {
+
+            //Check is we are already sad to avoid resetting the mood and message
+            if(currentMood !== 'sad'){
+                setMood('sad');
+            }
+            
+            // Shake the screen for effect
+            const noBtn = document.getElementById('no-btn');
+            const card = document.querySelector('#proposal-container .card');
+
+            const maxX = card.clientWidth - noBtn.offsetWidth;
+            const maxY = card.clientHeight - noBtn.offsetHeight;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = Math.floor(Math.random() * maxX) + 'px';
+            noBtn.style.top = Math.floor(Math.random() * maxY) + 'px';
+            card.style.animation = "shake 0.5s ease";
+            
+            // Reset animation so it can shake again
+            setTimeout(() => { card.style.animation = ""; }, 500);
+        }
+
+        // Function to Handle Yes Answer to Proposal
         function handleProposal(answer) {
             if (answer === 'yes') {
                 document.getElementById('proposal-container').style.display = 'none';
                 document.getElementById('success-container').style.display = 'flex';
+
+                setMood('happy'); // Restore the love
+                // Trigger the heart confetti for extra celebration!
                 launchHeartConfetti();
             } else {
                 const errorPopup = document.getElementById('system-error-overlay');
@@ -404,6 +665,7 @@
             }
         }
 
+        // Functions to Launch Heart Confetti
         function launchHeartConfetti() {
             const confetti = document.getElementById('heart-confetti');
             const count = 25; 
@@ -433,6 +695,7 @@
 
             setTimeout(() => { clearInterval(intervalId); }, 12000);
         }
+
     </script>
 </body>
 </html>
