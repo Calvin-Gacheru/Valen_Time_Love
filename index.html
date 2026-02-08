@@ -478,8 +478,8 @@
         function onYouTubeIframeAPIReady() {
             if(MUSIC_ID) {
                 player = new YT.Player('music-player', {
-                    height: '1',
-                    width: '1',
+                    height: '0',
+                    width: '0',
                     videoId: MUSIC_ID,
                     playerVars: {
                         'autoplay': 0, 
@@ -491,18 +491,31 @@
                         'origin': window.location.origin
                     },
                     events: {
-                        'onReady': function(event) {
-                            console.log("Player is ready!");
-                            // Option to lower volume
-                            event.target.setVolume(50);
-                        },
+                        'onReady': onPlayerReady,
+                        // 
+                        
+                        // function(event) {
+                        //     console.log("Player is ready!");
+                        //     // Option to lower volume
+                        //     event.target.setVolume(50);
+                        // },
                         'onError': function(e) {
                             console.error("Error loading YouTube video:", e.data);
                         }
                     }
                 });
             }
+
         }
+        // THE TRICK: Start music on the very first click anywhere on the page
+        function onPlayerReady(event) {
+            document.body.addEventListener('click', function() {
+                if (player && player.getPlayerState() !== 1) {
+                    player.playVideo();
+                    player.setVolume(50);
+                }
+            }, { once: true }); // This ensures it only tries to start once
+        }    
 
         // Function to Load Each Question
         function loadQuestion() {
